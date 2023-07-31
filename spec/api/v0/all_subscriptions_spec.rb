@@ -31,45 +31,45 @@ RSpec.describe 'Subscription Index API' do
       expect(json[:data]).to be_a(Array)
 
       expect(json[:data].count).to eq(3)
+      expect(json[:data][2]).to be_a(Hash)
+
+      expect(json[:data][2]).to have_key(:id)
+      expect(json[:data][2][:id]).to be_a(String)
+      expect(json[:data][2][:id]).to eq(@subscription1[:id].to_s)
+
+      expect(json[:data][2]).to have_key(:type)
+      expect(json[:data][2][:type]).to be_a(String)
+      expect(json[:data][2][:type]).to eq('subscription')
+
+      expect(json[:data][2]).to have_key(:attributes)
+      expect(json[:data][2][:attributes]).to be_a(Hash)
+
+      expect(json[:data][2][:attributes]).to have_key(:title)
+      expect(json[:data][2][:attributes][:title]).to be_a(String)
+      expect(json[:data][2][:attributes][:title]).to eq('Earl Grey')
+
+      expect(json[:data][2][:attributes]).to have_key(:price)
+      expect(json[:data][2][:attributes][:price]).to be_a(Float)
+      expect(json[:data][2][:attributes][:price]).to eq(10.0)
+
+      expect(json[:data][2][:attributes]).to have_key(:status)
+      expect(json[:data][2][:attributes][:status]).to be_a(String)
+      expect(json[:data][2][:attributes][:status]).to eq('cancelled')
+
+      expect(json[:data][2][:attributes]).to have_key(:frequency)
+      expect(json[:data][2][:attributes][:frequency]).to be_a(String)
+      expect(json[:data][2][:attributes][:frequency]).to eq('biweekly')
+
+      expect(json[:data][2][:attributes]).to have_key(:customer_id)
+      expect(json[:data][2][:attributes][:customer_id]).to be_a(Integer)
+      expect(json[:data][2][:attributes][:customer_id]).to eq(@customer1[:id])
+
+      expect(json[:data][2][:attributes]).to have_key(:tea_id)
+      expect(json[:data][2][:attributes][:tea_id]).to be_a(Integer)
+      expect(json[:data][2][:attributes][:tea_id]).to eq(@tea1[:id])
+
       expect(json[:data][0]).to be_a(Hash)
-
-      expect(json[:data][0]).to have_key(:id)
-      expect(json[:data][0][:id]).to be_a(String)
-      expect(json[:data][0][:id]).to eq(@subscription1[:id].to_s)
-
-      expect(json[:data][0]).to have_key(:type)
-      expect(json[:data][0][:type]).to be_a(String)
-      expect(json[:data][0][:type]).to eq('subscription')
-
-      expect(json[:data][0]).to have_key(:attributes)
-      expect(json[:data][0][:attributes]).to be_a(Hash)
-
-      expect(json[:data][0][:attributes]).to have_key(:title)
-      expect(json[:data][0][:attributes][:title]).to be_a(String)
-      expect(json[:data][0][:attributes][:title]).to eq('Earl Grey')
-
-      expect(json[:data][0][:attributes]).to have_key(:price)
-      expect(json[:data][0][:attributes][:price]).to be_a(Float)
-      expect(json[:data][0][:attributes][:price]).to eq(10.0)
-
-      expect(json[:data][0][:attributes]).to have_key(:status)
-      expect(json[:data][0][:attributes][:status]).to be_a(String)
-      expect(json[:data][0][:attributes][:status]).to eq('cancelled')
-
-      expect(json[:data][0][:attributes]).to have_key(:frequency)
-      expect(json[:data][0][:attributes][:frequency]).to be_a(String)
-      expect(json[:data][0][:attributes][:frequency]).to eq('biweekly')
-
-      expect(json[:data][0][:attributes]).to have_key(:customer_id)
-      expect(json[:data][0][:attributes][:customer_id]).to be_a(Integer)
-      expect(json[:data][0][:attributes][:customer_id]).to eq(@customer1[:id])
-
-      expect(json[:data][0][:attributes]).to have_key(:tea_id)
-      expect(json[:data][0][:attributes][:tea_id]).to be_a(Integer)
-      expect(json[:data][0][:attributes][:tea_id]).to eq(@tea1[:id])
-
-      expect(json[:data][1]).to be_a(Hash)
-      expect(json[:data][1][:attributes][:status]).to eq('active')
+      expect(json[:data][0][:attributes][:status]).to eq('active')
     end
   end
 end
