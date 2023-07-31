@@ -62,4 +62,30 @@ RSpec.describe 'Cancel Subscription API' do
       expect(json[:data][:attributes][:tea_id]).to eq(@tea1[:id])
     end
   end
+
+  describe 'sad path' do
+    it 'returns 404 if customer is not found' do
+      delete "/api/v0/customers/999999999/subscriptions/#{@subscription1[:id]}", headers: @headers
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json).to be_a(Hash)
+      expect(json[:errors][:detail]).to eq("Couldn't find Customer with 'id'=999999999")
+    end
+
+    it 'returns 404 if subscription is not found' do
+      delete "/api/v0/customers/#{@customer1[:id]}/subscriptions/999999999", headers: @headers
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json).to be_a(Hash)
+      expect(json[:errors][:detail]).to eq("Couldn't find Subscription with 'id'=999999999 [WHERE \"subscriptions\".\"customer_id\" = $1]")
+    end
+  end
 end
