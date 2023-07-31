@@ -72,4 +72,18 @@ RSpec.describe 'Subscription Index API' do
       expect(json[:data][0][:attributes][:status]).to eq('active')
     end
   end
+
+  describe 'sad path' do
+    it 'returns 404 if customer does not exist' do
+      get "/api/v0/customers/999999999/subscriptions", headers: @headers
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json).to be_a(Hash)
+      expect(json[:errors][:detail]).to eq("Couldn't find Customer with 'id'=999999999")
+    end
+  end
 end
