@@ -61,4 +61,42 @@ RSpec.describe 'Subscription API' do
       expect(Subscription.last.title).to eq('Earl Grey')
     end
   end
+
+  describe 'sad path' do
+    it 'returns an error if customer does not exist' do
+      post "/api/v0/customers/1000/subscriptions", params: {tea_id: @tea1[:id], title: 'Earl Grey', price: 10, frequency: 1}.to_json, headers: @headers
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(422)
+
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json).to be_a(Hash)
+      expect(json[:errors][:detail]).to eq('Validation failed: Customer must exist')
+    end
+
+    it 'returns an error if tea does not exist' do
+      post "/api/v0/customers/#{@customer1[:id]}/subscriptions", params: {tea_id: 1000, title: 'Earl Grey', price: 10, frequency: 1}.to_json, headers: @headers
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(422)
+
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json).to be_a(Hash)
+      expect(json[:errors][:detail]).to eq('Validation failed: Tea must exist')
+    end
+
+    it 'returns an error if title is missing' do
+      post "/api/v0/customers/#{@customer1[:id]}/subscriptions", params: {tea_id: @tea1[:id], title: '', price: 10, frequency: 1}.to_json, headers: @headers
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(422)
+
+      json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(json).to be_a(Hash)
+      expect(json[:errors][:detail]).to eq("Validation failed: Title can't be blank")
+    end
+  end
 end
